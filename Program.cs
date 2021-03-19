@@ -121,7 +121,7 @@ namespace SimulatedAnnealing
             strNum = 0;
             fileLines[strNum] = ('\n' + "Initial temp = 1000" + '\n');
             strNum++;
-            fileLines[strNum] = ("Cooling Factor =  0.95" +'\n');
+            fileLines[strNum] = ("Cooling Factor =  0.98" +'\n');
             strNum++;
             fileLines[strNum] = ("Total Swaps = " + swaps + '\n');
             strNum++;
@@ -202,7 +202,7 @@ namespace SimulatedAnnealing
         static int[,] SimulatedAnnealing(int[,] compat, int[,] rooms)
         {
             double t = 1000;
-            double alpha = 0.95;
+            double alpha = 0.98;
             double epsilon = .001;
             double proba;
             int delta;
