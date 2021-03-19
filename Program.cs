@@ -178,6 +178,10 @@ namespace SimulatedAnnealing
                     {
                         Swap(compat, rooms, swapType, r1, r2, cTest[1], cTest[2]);
                         swaps++;
+                        if (swapType == 1)
+                        {
+                            swaps++;
+                        }
                     }
                     else
                     {
@@ -187,7 +191,15 @@ namespace SimulatedAnnealing
                         {
                             Swap(compat, rooms, swapType, r1, r2, cTest[1], cTest[2]);
                             swaps++;
+                            if(swapType == 1)
+                            {
+                                swaps++;
+                            }
                         }
+                    }
+                    if(swaps == 2000)
+                    {
+                        break;
                     }
                 }
                 totalStates += states;
