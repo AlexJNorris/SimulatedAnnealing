@@ -196,8 +196,8 @@ namespace SimulatedAnnealing
         }
         static int[,] SimulatedAnnealing(int[,] compat, int[,] rooms)
         {
-            double t = 10000;
-            double alpha = 0.999;
+            double t = 100;
+            double alpha = 0.99;
             double epsilon = .001;
             double proba;
             int delta;
@@ -243,7 +243,7 @@ namespace SimulatedAnnealing
                     }
                     else
                     {
-                        proba = rand.Next();
+                        proba = rand.Next(0,100);
                         delta = cTest[0] - cTotal;
                         if(proba < Math.Exp(-delta / t))
                         {
