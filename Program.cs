@@ -91,19 +91,13 @@ namespace SimulatedAnnealing
         static void FileOutRooms(int[,] compat, int[,] rooms, int swaps, int states)
         {
             string[] fileLines = new string[100];
-            int strNum = 0;
+            int strNum = 8;
             int s1, s2, s3, s4, fit, avg;
             int worst = 0;
             int best = 600;
             int worstR = 0, bestR = 0;
             avg = ComputeAverageFitness(compat, rooms);
 
-            fileLines[strNum] = ("Total Swaps = " + swaps + '\n');
-            strNum++;
-            fileLines[strNum] = ("Total States = " + states + '\n');
-            strNum++;
-            fileLines[strNum] = ("Average Fitness = " + avg + '\n');
-            strNum++;
             for (int i = 0; i < 50; i++)
             {
                 s1 = rooms[i, 0];
@@ -124,7 +118,18 @@ namespace SimulatedAnnealing
                     worstR = i;
                 }
             }
-            fileLines[strNum] = ('\n' + "Best Fitness = " + best + " in Room #" + bestR + '\n');
+            strNum = 0;
+            fileLines[strNum] = ('\n' + "Initial temp = 1000" + '\n');
+            strNum++;
+            fileLines[strNum] = ("Cooling Factor =  0.95" +'\n');
+            strNum++;
+            fileLines[strNum] = ("Total Swaps = " + swaps + '\n');
+            strNum++;
+            fileLines[strNum] = ("Total States = " + states + '\n');
+            strNum++;
+            fileLines[strNum] = ("Average Fitness = " + avg + '\n');
+            strNum++;
+            fileLines[strNum] = ("Best Fitness = " + best + " in Room #" + bestR + '\n');
             strNum++;
             fileLines[strNum] = ("Worst Fitness = " + worst + " in Room #" + worstR + '\n');
             File.WriteAllLines("Output.txt", fileLines);
@@ -196,8 +201,8 @@ namespace SimulatedAnnealing
         }
         static int[,] SimulatedAnnealing(int[,] compat, int[,] rooms)
         {
-            double t = 100;
-            double alpha = 0.99;
+            double t = 1000;
+            double alpha = 0.95;
             double epsilon = .001;
             double proba;
             int delta;
@@ -243,9 +248,12 @@ namespace SimulatedAnnealing
                     }
                     else
                     {
-                        proba = rand.Next(0,100);
+                        proba = rand.NextDouble();
                         delta = cTest[0] - cTotal;
-                        if(proba < Math.Exp(-delta / t))
+                       // Console.WriteLine();
+                       // Console.WriteLine(proba);
+                       // Console.WriteLine(Math.Exp(-delta / t));
+                        if (proba < Math.Exp(-delta / t))
                         {
                             Swap(compat, rooms, swapType, r1, r2, cTest[1], cTest[2]);
                             swaps++;
