@@ -59,7 +59,11 @@ namespace SimulatedAnnealing
         static void ConsoleOutRooms(int[,] compat, int[,] rooms)
         {
             int s1, s2, s3, s4, fit, avg;
+            int worst = 0;
+            int best = 600;
+            int worstR = 0, bestR = 0;
             avg = ComputeAverageFitness(compat, rooms);
+
             Console.WriteLine("Average Fitness = " + avg + '\n');
             for(int i = 0; i < 50; i++)
             {
@@ -69,7 +73,61 @@ namespace SimulatedAnnealing
                 s4 = rooms[i, 3];
                 fit = ComputeRoomFitness(compat, rooms, i);
                 Console.WriteLine("Room " + i + " fitness = " + fit + "  { " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + "}");
+                if (fit < best)
+                {
+                    best = fit;
+                    bestR = i;
+                }
+                if (fit > worst)
+                {
+                    worst = fit;
+                    worstR = i;
+                }
             }
+            Console.WriteLine('\n' + "Best Fitness = " + best + " in Room #" + bestR + '\n');
+            Console.WriteLine("Worst Fitness = " + worst + " in Room #" + worstR + '\n');
+
+        }
+        static void FileOutRooms(int[,] compat, int[,] rooms, int swaps, int states)
+        {
+            string[] fileLines = new string[100];
+            int strNum = 0;
+            int s1, s2, s3, s4, fit, avg;
+            int worst = 0;
+            int best = 600;
+            int worstR = 0, bestR = 0;
+            avg = ComputeAverageFitness(compat, rooms);
+
+            fileLines[strNum] = ("Total Swaps = " + swaps + '\n');
+            strNum++;
+            fileLines[strNum] = ("Total States = " + states + '\n');
+            strNum++;
+            fileLines[strNum] = ("Average Fitness = " + avg + '\n');
+            strNum++;
+            for (int i = 0; i < 50; i++)
+            {
+                s1 = rooms[i, 0];
+                s2 = rooms[i, 1];
+                s3 = rooms[i, 2];
+                s4 = rooms[i, 3];
+                fit = ComputeRoomFitness(compat, rooms, i);
+                fileLines[strNum] = ("Room " + i + " fitness = " + fit + "  { " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + "}");
+                strNum++;
+                if (fit < best)
+                {
+                    best = fit;
+                    bestR = i;
+                }
+                if (fit > worst)
+                {
+                    worst = fit;
+                    worstR = i;
+                }
+            }
+            fileLines[strNum] = ('\n' + "Best Fitness = " + best + " in Room #" + bestR + '\n');
+            strNum++;
+            fileLines[strNum] = ("Worst Fitness = " + worst + " in Room #" + worstR + '\n');
+            File.WriteAllLines("Output.txt", fileLines);
         }
         //return array of {compatibility, random student in room 1, random student in room 2}
         static int[] TestSwap(int[,] compat, int[,]roomsOG, int swapType, int r1, int r2)
@@ -212,6 +270,7 @@ namespace SimulatedAnnealing
             }
             Console.WriteLine("Total Swaps = " + totalSwaps + '\n');
             Console.WriteLine("Total States = " + totalStates + '\n');
+            FileOutRooms(compat, rooms, totalSwaps, totalStates);
 
             return rooms;
         }
